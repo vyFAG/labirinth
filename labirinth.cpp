@@ -8,7 +8,7 @@ Labirinth::Labirinth(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Labirinth)
 {
-    this->setFixedSize(400, 400);
+    this->setFixedSize(401, 401);
     
     ui->setupUi(this);
     
@@ -21,10 +21,9 @@ Labirinth::Labirinth(QWidget *parent)
     for (int h = 0; h < height_cells; h++) {
         labirinth[h].resize(width_cells);
         for (int w = 0; w < width_cells; w++) {
-            labirinth[h][w].resize(1);
+            labirinth[h][w].resize(2);
             
             for(int i = 0; i < 1; i++) {
-                
                 labirinth[h][w][i] = dist(gen);
             }
             
@@ -43,6 +42,8 @@ void Labirinth::paintEvent(QPaintEvent *event) {
     
     QPainter painter(this);
     painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap));
+    
+    painter.drawRect(0, 0, 400, 400);
     
     for (int h = 0; h < height_cells; h++) {
         for (int w = 0; w < width_cells; w++) {
