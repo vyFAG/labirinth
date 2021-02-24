@@ -21,10 +21,12 @@ protected:
 private:
     Ui::Labirinth *ui;
     
-    int height_cells = 50;
-    int width_cells = 50;
+    int height_cells = 20;
+    int width_cells = 20;
     int cell_width = 400 / height_cells;
     
-    QVector<QVector<QVector<int>>> labirinth;
+    QVector<QVector<bool>> vertical_barier;
+    QVector<QVector<bool>> horizontal_barier;
+    
 };
 #endif // LABIRINTH_H

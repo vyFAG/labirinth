@@ -12,22 +12,51 @@ Labirinth::Labirinth(QWidget *parent)
     
     ui->setupUi(this);
     
-    labirinth.resize(height_cells);
+    vertical_barier.resize(height_cells - 1);
+    horizontal_barier.resize(height_cells - 1);
     
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937 gen(rd());  // to seed mersenne twister.
-    std::uniform_int_distribution<> dist(0,3);
-    
-    for (int h = 0; h < height_cells; h++) {
-        labirinth[h].resize(width_cells);
-        for (int w = 0; w < width_cells; w++) {
-            labirinth[h][w].resize(2);
+    for(int h = 0; h < height_cells - 1; h++) {
+        for(int w = 0; w < width_cells - 1; w++) {
+            vertical_barier[h].resize(width_cells - 1);
+            vertical_barier[h].fill(1);
             
-            for(int i = 0; i < 1; i++) {
-                labirinth[h][w][i] = dist(gen);
+            horizontal_barier[h].resize(width_cells - 1);
+            horizontal_barier[h].fill(1);
+        }
+    }
+    
+    horizontal_barier[0].fill(0);
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0,1);
+    
+    int beg_index = 0;
+    int counter = 0;
+    
+    for(int h = 1; h < height_cells; h++) {
+        beg_index = 0;
+        counter = 0;
+        for(int w = 0; w < width_cells; w++) {
+            if (dist(gen) == 1 || w < width_cells) {
+                std::uniform_int_distribution<> rand_cell(beg_index, beg_index + counter);
+                
+                int random_cell = rand_cell(gen);
+                
+                vertical_barier[h - 1][random_cell] = 0;
+                
+                for (int i = beg_index; i < beg_index + counter - 1; i++) {
+                    horizontal_barier[h][i] = 0;
+                }
+                
+                if (w + 1 == width_cells) {
+                    break;
+                }
             }
             
-            qDebug() << labirinth[h][w];
+            else {
+                counter++;
+            }
         }
     }
 }
@@ -45,24 +74,18 @@ void Labirinth::paintEvent(QPaintEvent *event) {
     
     painter.drawRect(0, 0, 400, 400);
     
-    for (int h = 0; h < height_cells; h++) {
-        for (int w = 0; w < width_cells; w++) {
+    for (int h = 0; h < height_cells - 1; h++) {
+        for (int w = 0; w < width_cells - 1; w++) {
             painter.setBrush(QBrush(Qt::black));
+            if (h > 0) {
+                if (horizontal_barier[h - 1][w] == 1) {
+                    painter.drawLine(h * cell_width, w * cell_width, h * cell_width, (w + 1) * cell_width);
+                }
+            }
             
-            for(int i = 0; i < 1; i++) {
-                switch(labirinth[h][w][i]) {
-                case 0:
-                    painter.drawLine(w * cell_width, h * cell_width, (w + 1) * cell_width, h * cell_width);
-                    break;
-                case 1:
-                    painter.drawLine((w + 1) * cell_width, h * cell_width, (w + 1) * cell_width, (h + 1) * cell_width);
-                    break;
-                case 2:
-                    painter.drawLine(w * cell_width, (h + 1) * cell_width, (w + 1) * cell_width, (h + 1) * cell_width);
-                    break;
-                case 3:
-                    painter.drawLine(w * cell_width, h * cell_width, w * cell_width, (h + 1) * cell_width);
-                    break;
+            if (w > 0) {
+                if (vertical_barier[h][w - 1] == 1) {
+                    painter.drawLine(h * cell_width, w * cell_width, (h + 1) * cell_width, w * cell_width);
                 }
             }
         }
