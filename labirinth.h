@@ -21,8 +21,8 @@ protected:
 private:
     Ui::Labirinth *ui;
     
-    int height_cells = 20;
-    int width_cells = 20;
+    int height_cells = 6;
+    int width_cells = 6;
     int cell_width = 400 / height_cells;
     
     QVector<QVector<bool>> vertical_barier;
