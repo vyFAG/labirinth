@@ -79,11 +79,11 @@ void Labirinth::paintEvent(QPaintEvent *event) {
         for (int w = 0; w < width_cells; w++) {
             painter.setBrush(QBrush(Qt::black));
             
-            if (horizontal_barier[h][w] == 1) {
+            if (horizontal_barier[w][h] == 1) {
                 painter.drawLine(h * cell_width, w * cell_width, (h + 1) * cell_width, w * cell_width);
             }
             
-            if (vertical_barier[h][w] == 1) {
+            if (vertical_barier[w][h] == 1) {
                 painter.drawLine(h * cell_width, w * cell_width, h * cell_width, (w + 1) * cell_width);
             }
             
